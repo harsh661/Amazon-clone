@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { CartContext } from '../CartContext'
 import { signOut } from 'firebase/auth'
 import { auth, db } from "../firebase";
@@ -8,15 +8,14 @@ import { doc, setDoc } from "firebase/firestore";
 
 
 const Account = () => {
-  const {user} = useContext(CartContext)
+  const {user, address} = useContext(CartContext)
   
   const[name, setName] = useState(user?.displayName)
   const[mail, setMail] = useState(user?.email)
   const[pass, setPass] = useState('')
-  const[street, setStreet] = useState('')
-  const[city, setCity] = useState('')
-  const[pin, setPin] = useState('')
-//   const[address, setAddress] = useState(user.displayName)
+  const[street, setStreet] = useState(address.street)
+  const[city, setCity] = useState(address.city)
+  const[pin, setPin] = useState(address.pin)
 
   const navigate = useNavigate()
   const signout = () => {
@@ -53,10 +52,13 @@ const Account = () => {
   const changeAddress = async (e) => {
     e.preventDefault()
     await setDoc(doc(db, 'users', user.email), {
-      city: city,
-      street: street,
-      pin: pin,
+      address: {
+        street: street,
+        city: city,
+        pin: pin,
+      }
     })
+    navigate('/')
   }
 
   return (

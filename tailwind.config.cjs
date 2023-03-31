@@ -30,6 +30,10 @@ module.exports = {
       },
       minHeight: {
         'unset': 'unset'
+      },
+      boxShadow: {
+        'menu': '0 -2px 5px 2px rgba(0,0,0,0.3);',
+        'card': '0 0 1px 2px rgba(0, 0, 0, 0.2)'
       }
     },
   },

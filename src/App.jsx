@@ -9,6 +9,8 @@ import Navigation from "./components/Navigation";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import Account from "./pages/Account";
+import Item from "./pages/Item";
+import Orders from "./pages/Orders";
 
 const promise = loadStripe("pk_test_51Mr1JKSEcQyqmSdkpV8NGJygkO21Md20nribMqVroFrnJqsUwTcyjpPkOyCIRmSxTnQqXgr5I0owJJ4LccaDaXOw00msG6fCcz")
 
@@ -41,6 +43,14 @@ const router = createBrowserRouter([
       {
         path: "/account",
         element: <Account />
+      },
+      {
+        path: "/product/:id",
+        element: <Item />
+      },
+      {
+        path: "/orders",
+        element: <Orders />
       }
     ]},
     {

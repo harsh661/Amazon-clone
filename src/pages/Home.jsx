@@ -2,11 +2,12 @@ import React, { useContext, useEffect, useState } from 'react'
 import { CartContext } from '../CartContext'
 import Product from '../components/Product'
 import { auth } from "../firebase";
-import {collection, getDocs} from 'firebase/firestore'
+import {collection, getDocs, doc, getDoc } from 'firebase/firestore'
 import { db } from '../firebase';
+import Slider from '../components/Slider';
 
 const Home = () => {
-  const {setUser, user} = useContext(CartContext)
+  const {setUser, user, setAddress} = useContext(CartContext)
   const [data, setData] = useState([])
   const [shown, setShown] = useState(false)
 
@@ -18,23 +19,33 @@ const Home = () => {
     setShown(true)
   }
 
+  async function getAddress(db) {
+    if(user) {
+    const docRef = doc(db, "users", user?.email);
+    const docSnap = await getDoc(docRef);
+    
+    if (docSnap.exists()) {
+      const addr = (docSnap.data());
+      setAddress(addr.address)
+    } else {
+      console.log("No Address Provided");
+    }
+  }
+  }
+
   useEffect(() => {
     auth.onAuthStateChanged(state => {
       setUser(state)
     })
     getData(db)
-    console.log(user)
-  }, [])
+    getAddress(db)
+  }, [user])
 
   return (
     <div>
-        <div className='max-w-[1500px] mx-auto relative pt-48 md:pt-64'>
-        <img src="https://m.media-amazon.com/images/W/IMAGERENDERING_521856-T1/images/I/61+Om+g+8SL._SX3000_.jpg"
-          className='absolute top-0 -z-10 h-60 sm:h-auto object-cover w-full'/>
-        {/* <img src="https://m.media-amazon.com/images/W/IMAGERENDERING_521856-T1/images/I/61kdtk1sXJL._SX3000_.jpg"
-          className='absolute top-0 -z-10'/> */}
-
-            <div className={`grid grid-cols-2 lg:grid-cols-4 md:grid-cols-3 p-5 pb-20 gap-2 md:gap-5 ${shown && `bg-gradient-to-t from-main via-main to-transparent`}`}>
+        <div className='max-w-[1500px] mx-auto relative'>
+            <Slider />
+            <div className={`absolute top-40 md:top-64 grid grid-cols-2 lg:grid-cols-4 md:grid-cols-3 p-2 md:p-5 pb-20 gap-2 md:gap-5 ${shown && `bg-gradient-to-t from-main via-main to-transparent`}`}>
                 {data.map((item, i) => {
                   return (
                     <Product 

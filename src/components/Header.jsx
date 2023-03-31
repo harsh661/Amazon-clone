@@ -6,20 +6,24 @@ import { CartContext } from '../CartContext'
 import {RiMicLine} from 'react-icons/ri'
 
 const Header = () => {
-  const {cartItems, user} = useContext(CartContext)
+  const {cartItems, user, address} = useContext(CartContext)
   return (
     <>
-    <div className='lg:bg-dark-primary lg:from-transparent bg-gradient-to-r from-phone-blue to-phone-green w-full flex items-center py-2 px-4 gap-5'>
+    <div className='lg:bg-dark-primary lg:from-transparent bg-gradient-to-r from-phone-blue to-phone-green w-full flex items-center py-2 lg:py-0 px-4 gap-5'>
         <Link to='/' className='hidden lg:flex'>
             <img src="/logo.svg" alt="logo" className='w-36'/>
         </Link>
-        <div className='items-end p-2 text-white hidden lg:flex'>
-            <HiOutlineLocationMarker size={18}/>
-            <div className='flex flex-col'>
-                <span className='text-xs whitespace-nowrap'>Deliver to, {user?.displayName || 'Guest'}</span>
-                <span className='text-sm font-semibold whitespace-nowrap'>Unknown 000000</span>
-            </div>
+        { address && 
+        <Link to='/account' className='items-end text-white hidden lg:flex'>
+        <HiOutlineLocationMarker size={18}/>
+        <div className='flex flex-col h-[34px]'>
+            <span className='text-xs whitespace-nowrap'>Deliver to {user?.displayName || 'Guest'}</span>
+            <span className='text-sm font-semibold whitespace-nowrap'>
+                {address && <span>{address?.city} {address?.pin}</span>}
+            </span>
         </div>
+        </Link>
+        }
         <div className='flex flex-row-reverse lg:flex-row rounded-md overflow-hidden w-full h-10 lg:border-none lg:shadow-none shadow-md border border-gray-border'>
             <input size={0} type="text" placeholder='Search Amazon.in' className='w-full lg:p-3'/>
             <button className='bg-white lg:bg-yellow-accent p-2 flex items-center justify-center'>
@@ -38,10 +42,10 @@ const Header = () => {
             </Link>
             }
         </div>
-        <div className='flex-col text-white p-2 hidden lg:flex'>
+        <Link to='/orders' className='flex-col text-white p-2 hidden lg:flex'>
             <span className='text-xs whitespace-nowrap'>Returns</span>
             <span className='text-sm font-semibold whitespace-nowrap'>& Orders</span>
-        </div>
+        </Link>
         <Link to='/cart' className='text-white p-2 relative hidden lg:flex'>
             <div className='flex w-max'>
                 <img src="/cart_logo.svg" alt="cart" className='w-10'/>
@@ -52,7 +56,7 @@ const Header = () => {
     </div>
     <div className='bg-light-green lg:bg-dark-secondary p-3 flex items-center gap-2 lg:text-white text-sm'>
         <HiOutlineLocationMarker size={18}/>
-        {user? `Deliver to ${user.email}`: 'You are not signed in'}
+        {user? `Deliver to ${user?.displayName}`: 'You are not signed in'}
     </div>
     </>
   )
