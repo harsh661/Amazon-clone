@@ -9,7 +9,6 @@ import { doc, setDoc } from "firebase/firestore";
 
 const Account = () => {
   const {user, address} = useContext(CartContext)
-  
   const[name, setName] = useState(user?.displayName)
   const[mail, setMail] = useState(user?.email)
   const[pass, setPass] = useState('')

@@ -65,7 +65,7 @@ const Cart = () => {
   setTotal(sum)
 
   return (
-    <div className={`${cartItems?.length !== 0 && 'lg:p-5'} bg-white lg:bg-inherit min-h-screen lg:min-h-unset lg:p-5 flex lg:flex-row flex-col-reverse gap-5 pb-20`}>
+    <div className={`${cartItems?.length !== 0 && 'lg:p-5'} max-w-[1680px] mx-auto bg-white lg:bg-inherit min-h-screen lg:min-h-unset lg:p-5 flex lg:flex-row flex-col-reverse gap-5 pb-20`}>
       <div className='flex flex-col bg-white flex-1'>
         <div className='flex flex-col p-5 border-t lg:border-none border-gray-border'>
           {cartItems?.length !== 0 && 
@@ -102,7 +102,8 @@ const Cart = () => {
         <Link to='/payment' className='flex items-center justify-center bg-yellow-main p-2 rounded-lg text-base lg:text-xs w-full'>Proceed to Buy</Link>
       </div>
       :
-      <div className='w-[260px] flex h-min flex-col gap-5'></div>}
+      <div className='w-[260px] flex h-min flex-col gap-5'></div>
+      }
     </div>
   )
 }

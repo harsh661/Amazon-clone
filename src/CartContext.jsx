@@ -6,7 +6,7 @@ export function CartContextProvider({children}) {
     const[cartItems, setCartItems] = useState([])
     const[user, setUser] = useState(null)
     const[total, setTotal] = useState(0)
-    const [address, setAddress] = useState(null)
+    const [address, setAddress] = useState('')
 
     return (
         <CartContext.Provider value={{cartItems, setCartItems, user, setUser, total, setTotal, address, setAddress}}>

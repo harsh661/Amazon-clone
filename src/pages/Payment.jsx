@@ -1,14 +1,18 @@
-import { useElements, useStripe, CardElement } from '@stripe/react-stripe-js'
+import { useElements, useStripe, CardElement, } from '@stripe/react-stripe-js'
 import React, { useContext, useState } from 'react'
 import { MdLock } from 'react-icons/md'
+import { useNavigate } from 'react-router'
 import { CartContext } from '../CartContext'
 import CheckoutProducts from '../components/CheckoutProducts'
+import { collection, addDoc, serverTimestamp } from "firebase/firestore"; 
+import { db } from "../firebase"
+
 
 const Payment = () => {
-
+  const navigate = useNavigate()
   const stripe = useStripe()
   const elements = useElements()
-  const {cartItems, user, total} = useContext(CartContext)
+  const {cartItems, user, total, address} = useContext(CartContext)
   const [error, setError] = useState(null)
   const [disbled, setDisbled] = useState(true)
   const [processing, setProcessing] = useState(false)
@@ -23,6 +27,27 @@ const Payment = () => {
     setDisbled(e.empty)
     setError(e.error ? e.error.message : '')
   }
+
+  const placeOrder = async () => {
+    const docRef = await addDoc(collection(db, user?.email), {
+      order: cartItems,
+      orderDate: serverTimestamp()
+    });
+    console.log("Document written with ID: ", docRef.id)
+
+    setTimeout(() => {
+      setProcessing(false)
+      navigate('/success')
+    }, 1000)
+  }
+
+  
+
+  const today = new Date()
+  const deliveryDay = new Date(today) 
+  deliveryDay.setDate(today.getDate() + 3)
+  const orderDate = today.toLocaleDateString('en-us', { weekday: 'short', month: 'short', day: 'numeric' })
+  const deliveryDate = deliveryDay.toLocaleDateString('en-us', { weekday: 'short', month: 'short', day: 'numeric' })
 
   return (
     <div className='min-h-screen w-full bg-white pb-20'>
@@ -40,10 +65,9 @@ const Payment = () => {
               <span className='text-lg font-semibold hidden md:block'>1</span>
               <span className='text-xl md:text-lg font-semibold'>Delivery address</span>
               <div className='flex flex-col gap-1 text-sm pl-5'>
-                <span>{user?.email}</span>
-                <span>street</span>
-                <span>address</span>
-                <span>phone</span>
+                <span>{user?.displayName}</span>
+                <span>{address?.street}</span>
+                <span>{address?.city}, {address.pin}</span>
               </div>
             </div>
             <div className='text-sm text-link-blue'>change</div>
@@ -57,7 +81,7 @@ const Payment = () => {
               <div className='text-sm text-link-blue'>change</div>
             </div>
             <div className='flex flex-1'>
-              <form onSubmit={handleSubmit} className='p-5 border w-full flex flex-col gap-5'>
+              <form className='p-5 border w-full flex flex-col gap-5'>
                 <CardElement onChange={handleChange}/>
                 <div className='flex w-full justify-end'>
                   <button 
@@ -69,12 +93,16 @@ const Payment = () => {
                 </div>
               </form>
             </div>
+            <div className='flex  gap-2 items-center'>
+              <input onChange={()=>setDisbled(false)} type="checkbox" name="cod" id="cod"/>
+              <span>Cash On Delivery</span>
+            </div>
           </div>
           <div className='flex flex-col justify-between px-5 border-b border-gray-border p-5'>
             <div className='flex gap-5 flex-col md:flex-row'>
               <span className='text-lg font-semibold hidden md:block'>3</span>
               <span className='text-xl md:text-lg font-semibold'>Items and delivery</span>
-              <div className='text-sm text-success-green font-bold'>Delivery date: 3 April 2023</div>
+              <div className='text-sm text-success-green font-bold'>Delivery date: {deliveryDate}</div>
             </div>
             <div className='lg:pl-40 py-2 flex flex-col gap-3 mb-5'>
               {cartItems.map(item => (
@@ -85,6 +113,7 @@ const Payment = () => {
               <button 
                 className={`flex items-center text-xs justify-center p-2 rounded-lg ${disbled ? 'bg-yellow-disabled text-gray-text': 'bg-yellow-main'}`}
                 disabled={processing || disbled || success}
+                onClick={placeOrder}
               >
                 <span>{processing ? 'Processing': 'Place your order'}</span>
               </button>
@@ -99,6 +128,7 @@ const Payment = () => {
           <button 
             className={`flex items-center justify-center py-2 rounded-lg text-xs w-full ${disbled ? 'bg-yellow-disabled text-gray-text': 'bg-yellow-main'}`}
             disabled={processing || disbled || success}
+            onClick={placeOrder}
           >
             <span>{processing ? 'Processing': 'Place your order'}</span>
           </button>
@@ -127,8 +157,9 @@ const Payment = () => {
       </div>
       <div className='w-full px-5 md:hidden'>
         <button 
-        disabled={processing || disbled || success}
         className={`flex items-center justify-center py-2 rounded-lg w-full ${disbled ? 'bg-yellow-disabled text-gray-text': 'bg-yellow-main'}`}
+        onClick={placeOrder}
+        disabled={processing || disbled || success}
         >
           <span>{processing ? 'Processing': 'Place your order'}</span>
         </button>

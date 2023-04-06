@@ -45,7 +45,7 @@ const Home = () => {
     <div>
         <div className='max-w-[1500px] mx-auto relative'>
             <Slider />
-            <div className={`absolute top-40 md:top-64 grid grid-cols-2 lg:grid-cols-4 md:grid-cols-3 p-2 md:p-5 pb-20 gap-2 md:gap-5 ${shown && `bg-gradient-to-t from-main via-main to-transparent`}`}>
+            <div className={`absolute top-40 md:top-64 grid grid-cols-2 lg:grid-cols-4 md:grid-cols-3 p-2 md:p-5 md:pb-40 pb-20 gap-2 md:gap-5 ${shown && `bg-gradient-to-t from-main via-main to-transparent`}`}>
                 {data.map((item, i) => {
                   return (
                     <Product 

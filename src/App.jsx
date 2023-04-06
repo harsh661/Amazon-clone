@@ -11,6 +11,7 @@ import { Elements } from "@stripe/react-stripe-js";
 import Account from "./pages/Account";
 import Item from "./pages/Item";
 import Orders from "./pages/Orders";
+import OrderCompletion from "./pages/OrderCompletion";
 
 const promise = loadStripe("pk_test_51Mr1JKSEcQyqmSdkpV8NGJygkO21Md20nribMqVroFrnJqsUwTcyjpPkOyCIRmSxTnQqXgr5I0owJJ4LccaDaXOw00msG6fCcz")
 
@@ -51,6 +52,10 @@ const router = createBrowserRouter([
       {
         path: "/orders",
         element: <Orders />
+      },
+      {
+        path: "/success",
+        element: <OrderCompletion />
       }
     ]},
     {
