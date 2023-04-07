@@ -1,22 +1,31 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { CartContext } from '../CartContext';
-import { collection, getDocs } from "firebase/firestore";
-import {db} from '../firebase'
+import { collection, getDocs, orderBy, query,  } from "firebase/firestore";
+import {db, auth} from '../firebase'
 import {SlArrowRight} from 'react-icons/sl'
 
 
 const Orders = () => {
-  const {user} = useContext(CartContext)
+  const {user, setUser} = useContext(CartContext)
   const [data, setData] = useState([])
   const getOrders = async () => {
-    const itemsCollection = collection(db, user?.email);
-    const items = await getDocs(itemsCollection);
-    const itemList = items.docs.map(doc => doc.data())
-    setData(itemList)
+    let list = []
+    const q = query(collection(db, user.email), orderBy('orderDate', 'asc'));
+
+    const querySnapshot = await getDocs(q)
+    querySnapshot.forEach((doc) => {
+      list.unshift(doc.data())
+    })
+    setData(list)
   }
+
   useEffect(() => {
+    auth.onAuthStateChanged(state => {
+      setUser(state)
+    })
+    setData([])
     getOrders()
-  }, [])
+  }, [user])
 
   return (
     <div className='lg:min-h-screen lg:bg-white'>

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { CartContext } from '../CartContext'
 import { signOut } from 'firebase/auth'
 import { auth, db } from "../firebase";
@@ -8,7 +8,14 @@ import { doc, setDoc } from "firebase/firestore";
 
 
 const Account = () => {
-  const {user, address} = useContext(CartContext)
+  const {user, setUser, address} = useContext(CartContext)
+
+  useEffect(() => {
+    auth.onAuthStateChanged(state => {
+      setUser(state)
+    })
+  }, [user])
+
   const[name, setName] = useState(user?.displayName)
   const[mail, setMail] = useState(user?.email)
   const[pass, setPass] = useState('')
