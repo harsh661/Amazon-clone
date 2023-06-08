@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { CartContext } from '../CartContext'
 import Product from '../components/Product'
 import { auth } from "../firebase";
-import {collection, getDocs, doc, getDoc } from 'firebase/firestore'
+import { doc, getDoc } from 'firebase/firestore'
 import { db } from '../firebase';
 import Slider from '../components/Slider';
 
