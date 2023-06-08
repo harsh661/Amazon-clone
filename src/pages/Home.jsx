@@ -11,12 +11,13 @@ const Home = () => {
   const [data, setData] = useState([])
   const [shown, setShown] = useState(false)
 
-  async function getData(db) {
-    const itemsCollection = collection(db, 'products');
-    const items = await getDocs(itemsCollection);
-    const itemList = items.docs.map(doc => doc.data())
-    setData(itemList)
-    setShown(true)
+  function getData() {
+    fetch('https://fakestoreapi.com/products')
+    .then(res=>res.json())
+    .then(json=> {
+      setData(json)
+      setShown(true)
+    })
   }
 
   async function getAddress(db) {
@@ -46,14 +47,14 @@ const Home = () => {
         <div className='max-w-[1500px] mx-auto relative'>
             <Slider />
             <div className={`absolute top-40 md:top-64 grid grid-cols-2 lg:grid-cols-4 md:grid-cols-3 p-2 md:p-5 md:pb-40 pb-20 gap-2 md:gap-5 ${shown && `bg-gradient-to-t from-main via-main to-transparent`}`}>
-                {data.map((item, i) => {
+                {data.map((item) => {
                   return (
                     <Product 
-                      key={i}
-                      id={`product-${i}`}
-                      rating={item.rating}
+                      key={item.id}
+                      id={item.id}
+                      rating={item.rating.rate}
                       title={item.title} 
-                      price={item.price}
+                      price={Math.round(item.price)*80}
                       image={item.image}
                     />
                   )

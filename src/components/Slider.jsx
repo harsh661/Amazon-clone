@@ -4,11 +4,11 @@ import { BsChevronRight, BsChevronLeft } from 'react-icons/bs'
 const Slider = () => {
   const[slide, setSlide] = useState(0)
   const images = [
-    "https://m.media-amazon.com/images/W/IMAGERENDERING_521856-T1/images/I/61+Om+g+8SL._SX3000_.jpg",
-    "https://m.media-amazon.com/images/W/IMAGERENDERING_521856-T1/images/I/61kdtk1sXJL._SX3000_.jpg",
-    "https://m.media-amazon.com/images/W/IMAGERENDERING_521856-T1/images/I/81YUT30R1KL._SX3000_.jpg",
-    "https://m.media-amazon.com/images/W/IMAGERENDERING_521856-T1/images/I/61s5QLgMYGL._SX3000_.jpg",
-    "https://m.media-amazon.com/images/W/IMAGERENDERING_521856-T1/images/I/71naBZ3Md0L._SX3000_.jpg"
+    "https://res.cloudinary.com/dup9yyuez/image/upload/v1686203540/MA_3000._CB603102090__ifltwt.jpg",
+    "https://res.cloudinary.com/dup9yyuez/image/upload/v1686203583/TallHero_3000X1200_Unrec._CB593464763__c6fwak.jpg",
+    "https://res.cloudinary.com/dup9yyuez/image/upload/v1686203603/Sports_3000._CB603118725__zn0wmz.jpg",
+    "https://res.cloudinary.com/dup9yyuez/image/upload/v1686203686/PC_3._CB603088692__itqafk.jpg",
+    "https://res.cloudinary.com/dup9yyuez/image/upload/v1686203656/61_Om_g_8SL._SX3000__kxtqw0.jpg"
   ]
 
   const prevImage = () => {

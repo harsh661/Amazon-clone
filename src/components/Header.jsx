@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import {MdSearch} from 'react-icons/md'
 import {HiOutlineLocationMarker} from 'react-icons/hi'
@@ -6,7 +6,20 @@ import { CartContext } from '../CartContext'
 import {RiMicLine} from 'react-icons/ri'
 
 const Header = () => {
-  const {cartItems, user, address} = useContext(CartContext)
+    const {cartItems, user, address} = useContext(CartContext)
+  const [category, setCategory] = useState([])
+  const getCategories = () => {
+    fetch('https://fakestoreapi.com/products/categories')
+            .then(res=>res.json())
+            .then(json=> {
+                setCategory(json)
+            })
+  }
+
+  useEffect(() => {
+    getCategories()
+  }, [])
+
   return (
     <>
     <div className='lg:bg-dark-primary lg:from-transparent bg-gradient-to-r from-phone-blue to-phone-green w-full flex items-center py-2 lg:py-0 px-4 gap-5'>
@@ -54,9 +67,15 @@ const Header = () => {
             <span className='absolute left-7 top-0 text-orange-accent font-bold'>{cartItems?cartItems?.length:0}</span>
         </Link>
     </div>
-    <div className='bg-light-green lg:bg-dark-secondary p-3 flex items-center gap-2 lg:text-white text-sm'>
+    <div className='bg-light-green lg:hidden lg:bg-dark-secondary p-3 flex items-center gap-2 lg:text-white text-sm'>
         <HiOutlineLocationMarker size={18}/>
         {user? `Deliver to ${user?.displayName}`: 'You are not signed in'}
+    </div>
+    <div className='bg-light-green hidden lg:bg-dark-secondary py-1 px-5 lg:flex items-center gap-5 lg:text-white text-sm'>
+            <span className='hover:outline outline-1 p-2 cursor-pointer'>All</span>
+        {category.map(elem => (
+            <span className='hover:outline outline-1 p-2 cursor-pointer'>{elem.charAt(0).toUpperCase() + elem.slice(1)}</span>
+        ))}
     </div>
     </>
   )

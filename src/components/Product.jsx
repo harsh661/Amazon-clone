@@ -17,7 +17,7 @@ const Product = ({id, image, rating, title, price}) => {
 
   return (
     <div className='flex flex-col p-3 justify-between bg-white'>
-      <Link to={`product/${title.replace(/\//g, "")}`} className='flex flex-col overflow-hidden pb-1'>
+      <Link to={`product/${id}`} className='flex flex-col overflow-hidden pb-1'>
         <img src={image} alt="product" 
         className='h-40 lg:h-72 object-contain md:pb-10 pb-3'
         />
@@ -25,7 +25,7 @@ const Product = ({id, image, rating, title, price}) => {
       </Link>
       <div className='overflow-hidden flex flex-col gap-2'>
           <div className='flex gap-1 text-orange-accent'>
-            {Array(rating)
+            {Array(Math.round(rating))
             .fill()
             .map((_, i) => (
               <p key={i}><ImStarFull size={12}/></p>

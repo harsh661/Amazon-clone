@@ -15,18 +15,19 @@ const Item = () => {
   const[data, setData] = useState([])
 
   const getItem = async () => {
-    const q = query(collection(db, "products"), where("title", "==", params.id))
-
-    const querySnapshot = await getDocs(q)
-    querySnapshot.forEach((doc) => {
-        const d = (doc.id, " => ", doc.data())
-        setData(d)
-    })
+    fetch(`https://fakestoreapi.com/products/${params.id}`)
+    .then(res=>res.json())
+    .then(json=>{
+      console.log(json)
+      setData(json)})
   }
+
+  const price = Math.round(data.price) * 80
+  const rating = Math.round(data?.rating?.rate)
 
   const addToCart = () => {
     setCartItems(prev => (
-      [...prev, {id: data.id, image:data.image, title: data.title, price: data.price}]
+      [...prev, {id: data.id, image:data.image, title: data.title, price: price}]
     ))
   }
 
@@ -37,18 +38,13 @@ const Item = () => {
 
   useEffect(() => {
     getItem()
+    window.scrollTo(0, 0)
   }, [])
 
   return (
-    <div className='min-h-screen w-full bg-white lg:pt-10 pb-14'>
-        <div className='max-w-[1500px] mx-auto flex flex-col lg:flex-row p-5 gap-5'>
+    <div className='min-h-screen w-full flex flex-col bg-white lg:pt-10 pb-14'>
+        <div className='max-w-[1500px] w-full mx-auto flex flex-col lg:flex-row p-5 gap-5'>
             <div className='flex-1 h-max flex'>
-                {data.image2 && 
-                <div className='hidden lg:flex flex-col gap-2 w-14'>
-                  <img src={data.image} className='border border-link-red'/>
-                  <img src={data.image2} className='border border-link-red'/>
-                </div>
-                }
                 <img src={data.image} alt="cover-image" className='w-full h-full object-cover'/>
             </div>
             <div className='flex-1 flex flex-col'>
@@ -57,23 +53,23 @@ const Item = () => {
                     <h2 className='text-base sm:text-2xl'>{data.title}</h2>
                     <div className='flex py-1 items-center w-full justify-end gap-4 lg:justify-start'>
                         <span className='flex gap-1 text-orange-accent'>
-                            {Array(data.rating)
+                            {Array(rating || 0)
                             .fill()
                             .map((_, i) => (
                             <p key={i}><ImStarFull size={14}/></p>
                             ))}
                         </span>
-                        <span className='text-xs text-link-blue'>1348 ratings</span>
+                        <span className='text-xs text-link-blue'>{data?.rating?.count} ratings</span>
                     </div>
                 </div>
                 {/* Price area */}
                 <div className='flex flex-col gap-2 py-3 border-y border-gray-border'>
                    <div className='flex gap-2'>
                       <span className='text-3xl font-light text-link-red'>-40%</span>
-                      <span className='text-3xl font'><sup className='text-base font-normal'>₹</sup><CurrencyFormat value={(data.price)} /></span>
+                      <span className='text-3xl font'><sup className='text-base font-normal'>₹</sup><CurrencyFormat value={(price)} /></span>
                    </div>
                    <span className='text-xs text-gray-text'>
-                      M.R.P.:<s>₹{data.price + Math.round(40*data.price/100)}</s>
+                      M.R.P.:<s>₹{price + Math.round(40*price/100)}</s>
                    </span>
                    <span>
                         <img src="https://m.media-amazon.com/images/G/31/marketing/fba/fba-badge_18px._CB485936079_.png" className='w-16 py-1'/>
@@ -110,6 +106,7 @@ const Item = () => {
                     </div>
                   </div>
                 </div>
+
                 <div className='hidden py-3 lg:flex gap-1 border-b border-gray-border'>
                   <span className='flex flex-1 flex-col items-center'>
                     <img src="https://m.media-amazon.com/images/G/31/A2I-Convert/mobile/IconFarm/trust_icon_free_shipping_81px._CB630870460_.png" className='rounded-full w-9'/>
@@ -135,7 +132,7 @@ const Item = () => {
                   <span className='lg:text-3xl text-xl font-semibold lg:font-normal flex items-center'>
                     <sup className='text-base hidden lg:flex pt-3'>₹</sup>
                     <span className='lg:hidden text-base lg:pt-3'>Total: ₹</span>
-                    <CurrencyFormat value={data.price} />
+                    <CurrencyFormat value={price} />
                   </span>
                   <span>
                       <img src="https://m.media-amazon.com/images/G/31/marketing/fba/fba-badge_18px._CB485936079_.png" className='w-16 py-1'/>
@@ -150,7 +147,7 @@ const Item = () => {
                   <span className='text-success-green'>In stock</span>
                   <p className='text-sm hidden lg:flex'>Shows what is inside. Item often ships in manufacturer container to reduce packaging. If this is a gift, consider shipping to a different address.</p>
                   <div className='flex flex-col gap-2 py-2'>
-                    <button onClick={addToCart} className={`${user ? 'w-full': 'w-52'} flex items-center justify-center bg-yellow-main py-2 rounded-full lg:text-sm`}>Add to Cart</button>
+                    <button onClick={addToCart} className='w-full lg:w-52 flex items-center justify-center bg-yellow-main py-2 rounded-full lg:text-sm'>Add to Cart</button>
                     <button onClick={buyNow} className='flex items-center justify-center bg-orange-accent py-2 w-full rounded-full lg:text-sm'>Buy Now</button>
                   </div>
                   <div className='flex items-center gap-1 py-5'>
@@ -178,6 +175,10 @@ const Item = () => {
                 <p className='lg:text-xs text-sm text-link-blue text-center'>Amazon Delivered</p>
               </span>
             </div>
+        </div>
+        <div className='w-full h-52 p-5 mx-auto max-w-[1400px]'>
+            <h2 className='font-bold text-xl lg:text-base lg:pt-5 lg:border-t'>Product description</h2>
+            <p className='lg:p-3 pt-2'>{data?.description}</p>
         </div>
     </div>
   )
