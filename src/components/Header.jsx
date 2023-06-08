@@ -6,7 +6,7 @@ import { CartContext } from '../CartContext'
 import {RiMicLine} from 'react-icons/ri'
 
 const Header = () => {
-    const {cartItems, user, address} = useContext(CartContext)
+  const {cartItems, user, address} = useContext(CartContext)
   const [category, setCategory] = useState([])
   const getCategories = () => {
     fetch('https://fakestoreapi.com/products/categories')
@@ -15,7 +15,6 @@ const Header = () => {
                 setCategory(json)
             })
   }
-
   useEffect(() => {
     getCategories()
   }, [])
@@ -72,9 +71,9 @@ const Header = () => {
         {user? `Deliver to ${user?.displayName}`: 'You are not signed in'}
     </div>
     <div className='bg-light-green hidden lg:bg-dark-secondary py-1 px-5 lg:flex items-center gap-5 lg:text-white text-sm'>
-            <span className='hover:outline outline-1 p-2 cursor-pointer'>All</span>
-        {category.map(elem => (
-            <span className='hover:outline outline-1 p-2 cursor-pointer'>{elem.charAt(0).toUpperCase() + elem.slice(1)}</span>
+            <Link to='/' className='hover:outline outline-1 p-2 cursor-pointer'>All</Link>
+        {category.map((elem, i) => (
+            <Link to={`/category/${elem}`} key={i} className='hover:outline outline-1 p-2 cursor-pointer'>{elem.charAt(0).toUpperCase() + elem.slice(1)}</Link>
         ))}
     </div>
     </>
