@@ -8,7 +8,7 @@ To get started with this project, follow these steps:
 
 1. Clone this repository onto your local machine using the command
     ``` 
-    git clone https://github.com/harsh661/amazon-clone.git
+    git clone https://github.com/harsh661/Amazon-clone.git
     ```
 2. Navigate to the project directory.
 3. Install the project dependencies by running the command `npm install`.
